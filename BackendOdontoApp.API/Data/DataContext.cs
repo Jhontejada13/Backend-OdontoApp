@@ -16,7 +16,7 @@ namespace BackendOdontoApp.API.Models.Data
         }
 
         public DbSet<Appointment> Appointments { get; set; }
-        public DbSet<CancellationReasons> CancellationReasons { get; set; }
+        public DbSet<CancellationReason> CancellationReasons { get; set; }
         public DbSet<DentalClinic> DentalClinics { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
         public DbSet<Procedure> Procedures { get; set; }
@@ -25,7 +25,7 @@ namespace BackendOdontoApp.API.Models.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<CancellationReasons>().HasIndex(x => x.Description).IsUnique();
+            modelBuilder.Entity<CancellationReason>().HasIndex(x => x.Description).IsUnique();
             modelBuilder.Entity<DentalClinic>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<DocumentType>().HasIndex(x => x.Description).IsUnique();
             modelBuilder.Entity<Procedure>().HasIndex(x => x.Name).IsUnique();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BackendOdontoApp.API.Data.Entities
 {
-    public class CancellationReasons
+    public class CancellationReason
     {
         public int Id { get; set; }
 
