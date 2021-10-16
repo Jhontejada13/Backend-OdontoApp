@@ -1,0 +1,31 @@
+﻿@model BackendOdontoApp.API.Data.Entities.Procedure
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1 style="color: #C86AF4">Editar</h1>
+
+<h4 style="color: #A7A4A4">Tipos de Documento</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <partial name="_Procedure" />
+
+            <div class="form-group">
+                <input type="submit" value="Editar" class="btn btn-outline-primary" />
+                <a asp-action="Index" class="btn btn-outline-success">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

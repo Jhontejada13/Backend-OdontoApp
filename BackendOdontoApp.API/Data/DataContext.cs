@@ -28,7 +28,7 @@ namespace BackendOdontoApp.API.Models.Data
             modelBuilder.Entity<CancellationReasons>().HasIndex(x => x.Description).IsUnique();
             modelBuilder.Entity<DentalClinic>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<DocumentType>().HasIndex(x => x.Description).IsUnique();
-            modelBuilder.Entity<Procedure>().HasIndex(x => x.Description).IsUnique();
+            modelBuilder.Entity<Procedure>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Speciality>().HasIndex(x => x.Name).IsUnique();
         }
     }
