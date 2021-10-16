@@ -69,3 +69,19 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+/* Personalized buttons style
+-------------------------------------------------- */
+.btn_new {
+    border: 1px solid #C86AF4;
+    color: #C86AF4;
+}
+
+.btn_new{
+    transition-duration: 0.2s;
+}
+
+.btn_new:hover {
+    background-color: #C86AF4;
+    color: white;
+}

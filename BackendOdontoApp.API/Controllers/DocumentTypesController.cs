@@ -24,23 +24,6 @@ namespace BackendOdontoApp.API.Controllers
             return View(await _context.DocumentTypes.ToListAsync());
         }
 
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var documentType = await _context.DocumentTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (documentType == null)
-            {
-                return NotFound();
-            }
-
-            return View(documentType);
-        }
-
         public IActionResult Create()
         {
             return View();
@@ -48,14 +31,34 @@ namespace BackendOdontoApp.API.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,Abreviature")] DocumentType documentType)
+        public async Task<IActionResult> Create(DocumentType documentType)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(documentType);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(documentType);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Ya existe este tipo de documento");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+
+                    }
+                }
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
             }
+
             return View(documentType);
         }
 
@@ -76,7 +79,7 @@ namespace BackendOdontoApp.API.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,Abreviature")] DocumentType documentType)
+        public async Task<IActionResult> Edit(int id, DocumentType documentType)
         {
             if (id != documentType.Id)
             {
@@ -89,19 +92,26 @@ namespace BackendOdontoApp.API.Controllers
                 {
                     _context.Update(documentType);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException dbUpdateException)
                 {
-                    if (!DocumentTypeExists(documentType.Id))
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        return NotFound();
+                        ModelState.AddModelError(string.Empty, "Ya existe este tipo de Documento");
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+
             }
             return View(documentType);
         }
@@ -113,30 +123,16 @@ namespace BackendOdontoApp.API.Controllers
                 return NotFound();
             }
 
-            var documentType = await _context.DocumentTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            DocumentType documentType = await _context.DocumentTypes.FirstOrDefaultAsync(m => m.Id == id);
+
             if (documentType == null)
             {
                 return NotFound();
             }
 
-            return View(documentType);
-        }
-
-        // POST: DocumentTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var documentType = await _context.DocumentTypes.FindAsync(id);
             _context.DocumentTypes.Remove(documentType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool DocumentTypeExists(int id)
-        {
-            return _context.DocumentTypes.Any(e => e.Id == id);
         }
     }
 }
