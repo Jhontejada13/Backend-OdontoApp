@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BackendOdontoApp.API.Data.Entities;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackendOdontoApp.API.Models.Data.Entities
 {
@@ -15,5 +17,7 @@ namespace BackendOdontoApp.API.Models.Data.Entities
         [MaxLength(5, ErrorMessage = "El campo {0} no puede tener más de {1} caracteres")]
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string Abreviature { get; set; }
+
+        public ICollection<User> Users { get; set; }
     }
 }
