@@ -16,5 +16,16 @@ namespace BackendOdontoApp.API.Data.Entities
 
         [Display(Name = "¿Canelada?")]
         public bool IsCancelated { get; set; }
+
+        [Display(Name = "Procedimiento")]
+        public ProcedureAppoinment ProcedureAppoinment { get; set; }
+
+        [Display(Name = "Motivo Cancelación")]
+        public CancellationReason CancellationReason { get; set; }
+
+        [Display(Name = "Usuario")]
+        public User User { get; set; }
+
+        public DentalClinic DentalClinic { get; set; }
     }
 }

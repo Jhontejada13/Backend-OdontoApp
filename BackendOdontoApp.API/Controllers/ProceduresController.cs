@@ -1,5 +1,6 @@
 ﻿using BackendOdontoApp.API.Data.Entities;
 using BackendOdontoApp.API.Models.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace BackendOdontoApp.API.Controllers
 {
+    [Authorize(Roles = "Odontologo")]
     public class ProceduresController : Controller
     {
         private readonly DataContext _context;

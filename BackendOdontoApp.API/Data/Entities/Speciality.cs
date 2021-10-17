@@ -15,6 +15,7 @@ namespace BackendOdontoApp.API.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string Name { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        [Display(Name = "Usuario")]
+        public User User { get; set; }
     }
 }

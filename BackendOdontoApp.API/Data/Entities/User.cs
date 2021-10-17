@@ -59,12 +59,14 @@ namespace BackendOdontoApp.API.Data.Entities
         [Display(Name = "Usuario")]
         public string FullName => $"{FirstName} {SecondName} {FirstLastName} {SecondLastName}";
 
+        public int SpecialityId { get; set; }
+
         [Display(Name = "Especialidad")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public Speciality Speciality { get; set; }
 
         [Display(Name = "Especialidad")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public DentalClinic DentalClinic { get; set; }
+
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }

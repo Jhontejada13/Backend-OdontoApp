@@ -1,6 +1,9 @@
 ﻿using BackendOdontoApp.API.Data.Entities;
+using BackendOdontoApp.API.Helpers;
 using BackendOdontoApp.API.Models.Data;
 using BackendOdontoApp.API.Models.Data.Entities;
+using BackendOdontoApp.Common.Enums;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,10 +12,12 @@ namespace BackendOdontoApp.API.Data
     public class SeedDb
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public SeedDb(DataContext context)
+        public SeedDb(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
         public async Task SeedAsync()
@@ -24,6 +29,50 @@ namespace BackendOdontoApp.API.Data
             await CheckDocumentTypesAsync();
             await CheckProceduresAsync();
             await CheckSpecialitiesAsync();
+            await CheckRolesAsync();
+            await CheckUserAsync("1010", "Maria", "Camila", "Quintana", "Jaramillo", "camilaquintana@yopmail.com", "3105318279", "Avenida siempre viva", UserType.Odontologo);
+            await CheckUserAsync("1010", "Leidy", "Andrea", "Tabares", "Nea", "laidytabares@yopmail.com", "3105318279", "Avenida siempre viva", UserType.Odontologo);
+            await CheckUserAsync("2020", "Jhon", "William", "Tejada", "Durango", "jhontejada@yopmail.com", "3105318279", "Avenida siempre viva", UserType.Paciente);
+            await CheckUserAsync("2020", "Manuel", "Andres", "Medrano", "Cacao", "manuelmedrano@yopmail.com", "3105318279", "Avenida siempre viva", UserType.Paciente);
+            await CheckUserAsync("2020", "Luisa", "Fernanda", "Capaz", "DeTodo", "lusacapaz@yopmail.com", "3105318279", "Avenida siempre viva", UserType.Paciente);
+
+
+        }
+
+        private async Task CheckUserAsync(string document, string firstName, string secondName, string firstLastName, string secondLastName, string email, string phoneNumber, 
+            string addrees, UserType userType)
+        {
+            User user = await _userHelper.GetUserAsync(email);
+            if (user == null)
+            {
+                user = new User
+                {
+                    Address = addrees,
+                    Document = document,
+                    DocumentType = _context.DocumentTypes.FirstOrDefault(x => x.Description == "Cédula de ciudadanía"),
+                    Email = email,
+                    FirstName = firstName,
+                    SecondName = secondName,
+                    FirstLastName = firstLastName,
+                    SecondLastName = secondLastName,
+                    PhoneNumber = phoneNumber,
+                    UserName = email,
+                    UserType = userType
+                };
+
+                await _userHelper.AddUserAsync(user, "123456");
+                await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+
+                //string token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                //await _userHelper.ConfirmEmailAsync(user, token);
+
+            }
+        }
+
+        private async Task CheckRolesAsync()
+        {
+            await _userHelper.CheckRoleAsync(UserType.Odontologo.ToString());
+            await _userHelper.CheckRoleAsync(UserType.Paciente.ToString());
         }
 
         private async Task CheckSpecialitiesAsync()
@@ -59,8 +108,8 @@ namespace BackendOdontoApp.API.Data
         {
             if (!_context.DocumentTypes.Any())
             {
-                _context.DocumentTypes.Add(new DocumentType { Description = "Cedula Ciudadnia", Abreviature = "c.c" });
-                _context.DocumentTypes.Add(new DocumentType { Description = "Cedula Extranjeria", Abreviature = "c.e" });
+                _context.DocumentTypes.Add(new DocumentType { Description = "Cédula de ciudadanía", Abreviature = "c.c" });
+                _context.DocumentTypes.Add(new DocumentType { Description = "Cédula Extranjería", Abreviature = "c.e" });
                 _context.DocumentTypes.Add(new DocumentType { Description = "Pasaporte", Abreviature = "pas" });
                 _context.DocumentTypes.Add(new DocumentType { Description = "Tarjeta de Indentidad", Abreviature = "t.i" });
 

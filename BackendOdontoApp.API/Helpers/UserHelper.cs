@@ -1,6 +1,10 @@
 ﻿using BackendOdontoApp.API.Data.Entities;
+using BackendOdontoApp.API.Models;
+using BackendOdontoApp.API.Models.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BackendOdontoApp.API.Helpers
@@ -9,36 +13,56 @@ namespace BackendOdontoApp.API.Helpers
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly DataContext _context;
+        private readonly SignInManager<User> _signInManager;
 
-        public UserHelper(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public UserHelper(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, DataContext context, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
+            _signInManager = signInManager;
         }
 
-        public Task<IdentityResult> AddUserAsync(User user, string password)
+        public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
-            throw new NotImplementedException();
+            return await _userManager.CreateAsync(user, password);
         }
 
-        public Task AddUserToRoleAsync(User user, string roleName)
+        public async Task AddUserToRoleAsync(User user, string roleName)
         {
-            throw new NotImplementedException();
+            await _userManager.AddToRoleAsync(user, roleName);
         }
 
-        public Task CheckRoleAsync(string roleName)
+        public async Task CheckRoleAsync(string roleName)
         {
-            throw new NotImplementedException();
+            bool roleExist = await _roleManager.RoleExistsAsync(roleName);
+            if (!roleExist)
+            {
+                await _roleManager.CreateAsync(new IdentityRole { Name = roleName });
+            }
         }
 
-        public Task<User> GetUserAsync(string email)
+        public async Task<User> GetUserAsync(string email)
         {
-            throw new NotImplementedException();
+            return await _context.Users
+                .Include(x => x.DocumentType)
+                .FirstOrDefaultAsync(x => x.Email == email);
         }
 
-        public Task<bool> IsUserInRoleAsync(User user, string roleName)
+        public async Task<bool> IsUserInRoleAsync(User user, string roleName)
         {
-            throw new NotImplementedException();
+            return await _userManager.IsInRoleAsync(user, roleName);
+        }
+
+        public async Task<SignInResult> LoginAsync(LoginViewModel model)
+        {
+            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }

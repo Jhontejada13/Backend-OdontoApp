@@ -15,8 +15,11 @@ namespace BackendOdontoApp.API.Models.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<CancellationReason> CancellationReasons { get; set; }
         public DbSet<DentalClinic> DentalClinics { get; set; }
+        public DbSet<Detail> Details { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
         public DbSet<Procedure> Procedures { get; set; }
+        public DbSet<ProcedureAppoinment> ProcedureAppoinments { get; set; }
+        public DbSet<ProcedurePhoto> ProcedurePhotos { get; set; }
         public DbSet<Speciality> Specialities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,6 +30,8 @@ namespace BackendOdontoApp.API.Models.Data
             modelBuilder.Entity<DocumentType>().HasIndex(x => x.Description).IsUnique();
             modelBuilder.Entity<Procedure>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Speciality>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<User>().HasOne<Speciality>().WithOne(x => x.User).HasForeignKey("SpecialityId");
+            //modelBuilder.Entity<User>().HasOne(x => x.Speciality).WithOne(x => x.User).HasForeignKey();
         }
     }
 }

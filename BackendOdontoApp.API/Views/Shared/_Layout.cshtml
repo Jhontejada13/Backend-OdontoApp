@@ -11,7 +11,7 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+            <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="color: #DEABF5; font-family: 'Pinyon Script', cursive; font-size: 30px;">OdontoApp</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -19,21 +19,39 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="DentalClinics" asp-action="Index" style="color: #A7A4A4">Clínicas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Procedures" asp-action="Index" style="color: #A7A4A4">Procedimientos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Specialities" asp-action="Index" style="color: #A7A4A4">Especialidades</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="DocumentTypes" asp-action="Index" style="color: #A7A4A4">Tipos de Documento</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="CancellationReasons" asp-action="Index" style="color: #A7A4A4">Motivos de cancelación</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Odontologo"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="DentalClinics" asp-action="Index" style="color: #A7A4A4">Clínicas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Procedures" asp-action="Index" style="color: #A7A4A4">Procedimientos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Specialities" asp-action="Index" style="color: #A7A4A4">Especialidades</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="DocumentTypes" asp-action="Index" style="color: #A7A4A4">Tipos Documento</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="CancellationReasons" asp-action="Index" style="color: #A7A4A4">Motivos cancelación</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Iniciar Sesión</a></li>
+                        }
                     </ul>
                 </div>
             </div>

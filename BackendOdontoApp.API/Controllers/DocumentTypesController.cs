@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BackendOdontoApp.API.Models.Data;
 using BackendOdontoApp.API.Models.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackendOdontoApp.API.Controllers
 {
+    [Authorize(Roles = "Odontologo")]
     public class DocumentTypesController : Controller
     {
         private readonly DataContext _context;
