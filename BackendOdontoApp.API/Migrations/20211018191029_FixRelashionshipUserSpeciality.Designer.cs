@@ -4,14 +4,16 @@ using BackendOdontoApp.API.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BackendOdontoApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20211018191029_FixRelashionshipUserSpeciality")]
+    partial class FixRelashionshipUserSpeciality
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,10 +209,15 @@ namespace BackendOdontoApp.API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Specialities");
                 });
@@ -298,9 +305,6 @@ namespace BackendOdontoApp.API.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SpecialityId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -324,8 +328,6 @@ namespace BackendOdontoApp.API.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("SpecialityId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -542,6 +544,15 @@ namespace BackendOdontoApp.API.Migrations
                     b.Navigation("Procedure");
                 });
 
+            modelBuilder.Entity("BackendOdontoApp.API.Data.Entities.Speciality", b =>
+                {
+                    b.HasOne("BackendOdontoApp.API.Data.Entities.User", "User")
+                        .WithMany("Specialities")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BackendOdontoApp.API.Data.Entities.User", b =>
                 {
                     b.HasOne("BackendOdontoApp.API.Data.Entities.DentalClinic", "DentalClinic")
@@ -554,15 +565,9 @@ namespace BackendOdontoApp.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendOdontoApp.API.Data.Entities.Speciality", "Speciality")
-                        .WithMany("Users")
-                        .HasForeignKey("SpecialityId");
-
                     b.Navigation("DentalClinic");
 
                     b.Navigation("DocumentType");
-
-                    b.Navigation("Speciality");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -642,14 +647,11 @@ namespace BackendOdontoApp.API.Migrations
                     b.Navigation("Procedures");
                 });
 
-            modelBuilder.Entity("BackendOdontoApp.API.Data.Entities.Speciality", b =>
-                {
-                    b.Navigation("Users");
-                });
-
             modelBuilder.Entity("BackendOdontoApp.API.Data.Entities.User", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("Specialities");
                 });
 
             modelBuilder.Entity("BackendOdontoApp.API.Models.Data.Entities.DocumentType", b =>

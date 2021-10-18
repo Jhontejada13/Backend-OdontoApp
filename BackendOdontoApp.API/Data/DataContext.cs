@@ -30,8 +30,6 @@ namespace BackendOdontoApp.API.Models.Data
             modelBuilder.Entity<DocumentType>().HasIndex(x => x.Description).IsUnique();
             modelBuilder.Entity<Procedure>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Speciality>().HasIndex(x => x.Name).IsUnique();
-            modelBuilder.Entity<User>().HasOne<Speciality>().WithOne(x => x.User).HasForeignKey("SpecialityId");
-            //modelBuilder.Entity<User>().HasOne(x => x.Speciality).WithOne(x => x.User).HasForeignKey();
         }
     }
 }

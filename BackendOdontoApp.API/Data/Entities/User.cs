@@ -51,7 +51,7 @@ namespace BackendOdontoApp.API.Data.Entities
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == Guid.Empty
             ? $"https://localhost:44340/img/no-image.png"
-            : $"https://vehiclesjhon.blob.core.windows.net/users/{ImageId}";
+            : $"https://usersodontoapp.blob.core.windows.net/users/{ImageId}";
 
         [Display(Name = "Tipo de usuario")]
         public UserType UserType { get; set; }
@@ -59,14 +59,13 @@ namespace BackendOdontoApp.API.Data.Entities
         [Display(Name = "Usuario")]
         public string FullName => $"{FirstName} {SecondName} {FirstLastName} {SecondLastName}";
 
-        public int SpecialityId { get; set; }
+        [Display(Name = "Clínicas")]
+        public DentalClinic DentalClinic { get; set; }
 
         [Display(Name = "Especialidad")]
         public Speciality Speciality { get; set; }
 
-        [Display(Name = "Especialidad")]
-        public DentalClinic DentalClinic { get; set; }
-
+        [Display(Name = "Citas")]
         public ICollection<Appointment> Appointments { get; set; }
     }
 }

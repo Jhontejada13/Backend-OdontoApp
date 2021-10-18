@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BackendOdontoApp.API.Data.Entities
 {
@@ -15,7 +12,7 @@ namespace BackendOdontoApp.API.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string Name { get; set; }
 
-        [Display(Name = "Usuario")]
-        public User User { get; set; }
+        [Display(Name = "Usuarios")]
+        public ICollection<User> Users { get; set; }
     }
 }
